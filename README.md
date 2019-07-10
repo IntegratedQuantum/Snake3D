@@ -1,5 +1,5 @@
 # Snake3D
-In Snake3D you can play snake on a 3d-cube.
+In Snake3D you can play snake on the surface of a 3d-cube.
 
 ### Features
 → two gamemodes:
