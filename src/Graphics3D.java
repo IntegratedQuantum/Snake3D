@@ -67,46 +67,58 @@ public class Graphics3D {
 			points[i][3] = get3DX(x2, z2);
 			points[i][4] = get3DY(y2, z2);
 		}
-		
-		// Store the average z-distance between the area and the middle-point of the cube. Used to decide which areas to paint and in which order.
-		// In a cube this value is r*cos(α) where α is the angle between z-axis and the normal through the area and r is here half the side length.
-		double [] val = new double[6];
-		for(int i = 0; i < 6; i++) {
+
+		// Find the closest point to the screen.
+		int closest = 0;
+		for(int i = 1; i < 8; i++) {
+			if(points[i][2] < points[closest][2])
+				closest = i;
+		}
+		// Find all three areas that that touch the closest point and store their index.
+		int k = 0;
+		int areas[] = new int[3];
+		for(int i = 0; i < 6 && k < 3; i++) {
 			for(int j = 0; j < 4; j++) {
-				val[i] += points[a[i][j]][2];
-			}
-			if(val[i] < 0) { // The area is only visible if the normal of the cube is pointing towards the screen(negative z).
-				vis[i] = true;
-			}
-			else {
-				vis[i] = false;
+				if(a[i][j] == closest) {
+					areas[k] = i;
+					k++;
+					break;
+				}
 			}
 		}
-		
-		// Select and order the closest three areas relative to the screen.
-		highest = new int[3];
-		for(int i = 0; i < 6; i++) {
-			if(val[i] < val[highest[0]]) {
+		// Store the average z-distance between the area and the middle-point of the cube. Used to decide which areas to paint and in which order.
+		// In a cube this value is r*cos(α) where α is the angle between z-axis and the normal through the area and r is here half the side length.
+		double [] val = new double[3];
+		for(int i = 0; i < 3; i++) {
+			val[i] = 0;
+			for(int j = 0; j < 4; j++)
+				val[i] += points[a[areas[i]][j]][2];
+		}
+		// Sort the areas by their distance to the screen:
+		highest[0] = highest[1] = highest[2] = 0;
+		for(int i = 1; i < 3; i++) {
+			if(val[i] < val[highest[0]])
 				highest[0] = i;
-			}
 		}
 		if(highest[0] == highest[1]) {
 			highest[1]++;
 			highest[2]++;
 		}
-		for(int i = 0; i < 6; i++) {
-			if(val[i] < val[highest[1]] && i != highest[0]) {
+		for(int i = highest[1]+1; i < 3; i++) {
+			if(val[i] < val[highest[1]] && i != highest[0])
 				highest[1] = i;
-			}
 		}
-		if(highest[1] == highest[2]) {
+		if(highest[1] == highest[2])
 			highest[2]++;
-		}
-		for(int i = 0; i < 6; i++) {
-			if(val[i] < val[highest[2]] && i != highest[0] && i != highest[1]) {
+		for(int i = highest[2]; i < 3; i++) {
+			if(i != highest[0] && i != highest[1]) {
 				highest[2] = i;
+				break;
 			}
 		}
+		// put the corresponding area index into the array.
+		for(int i = 0; i < 3; i++)
+			highest[i] = areas[highest[i]];
 	}
 	
 	// From now on paint a new color at that tile until changed..

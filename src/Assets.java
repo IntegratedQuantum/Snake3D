@@ -3,7 +3,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 
 
-// Stores the §D-graphics object and is responsible for file-saving/-loading.
+// Stores the 3D-graphics object and is responsible for file-saving/-loading.
 class Assets {
 	static Graphics3D g3d;
 	static void save(int [] score) {
