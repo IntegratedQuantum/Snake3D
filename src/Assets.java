@@ -8,7 +8,7 @@ class Assets {
 	static Graphics3D g3d;
 	static void save(int [] score) {
 		String s = "";
-		for(int k = 0; k < 4; k++) {
+		for(int k = 0; k < 5; k++) {
 			s += score[k]+"\n";
 		}
 		try {
@@ -22,18 +22,18 @@ class Assets {
 		}
 	}
 	static int [] load() {
-		int ret[] = new int[4];
+		int ret[] = new int[5];
 		try {
 			FileReader fr = new FileReader("score.snake3D");
 			BufferedReader br = new BufferedReader(fr);
-			for(int i = 0; i < 4; i++) {
+			for(int i = 0; i < 5; i++) {
 				String score = br.readLine();
 				ret[i] = Integer.parseInt(score);
 			}
 			br.close();
 			fr.close();
 		} catch (Exception e) {
-			save(new int[]{0, 0, 0, 0});
+			save(new int[]{0, 0, 0, 0, 0});
 		}
 		return ret;
 	}

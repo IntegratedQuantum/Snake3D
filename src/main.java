@@ -30,11 +30,11 @@ public class main extends JPanel implements KeyListener {
 	ArrayList<Object> border = new ArrayList<Object>();
 	double ax;
 	double ay;
-	int [] score = new int[4];
-	int [] highscore = new int[4];
+	int [] score = new int[5];
+	int [] highscore = new int[5];
 	int n = 0;
 	int gamemode;
-	String [] gamemodes = {"normal", "hard", "level 1", "level 2"}; // TODO: Allow the levels to be played in hard-mode.
+	String [] gamemodes = {"normal", "hard", "level 1", "level 2", "big cube"}; // TODO: Allow the levels to be played in hard-mode.
 	JFrame frame;
 	int [][][] level = { // TODO: store the level data in a file.
 			{			//x, y
@@ -128,10 +128,16 @@ public class main extends JPanel implements KeyListener {
 	
 	// Reset the current level.
 	public void initGame() {
+		if(gamemode == 4) {
+			size = 16;
+		} else {
+			size = 8;
+		}
+		snake = new Snake(size, size/2, size/2, 0);
 		border = new ArrayList<Object>();
 		Assets.g3d = new Graphics3D(size);
 		Assets.g3d.reload(0, 0);
-		
+
 		// Generate the two levels.
 		// TODO: make this more general.
 		if(gamemode == 2) {
@@ -156,7 +162,6 @@ public class main extends JPanel implements KeyListener {
 	
 	// Reset the game environment.
 	public void init() {
-		snake = new Snake(size, size/2, size/2, 0);
 		pause = true;
 		ax = 0;
 		ay = 0;
