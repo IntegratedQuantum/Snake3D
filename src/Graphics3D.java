@@ -33,7 +33,6 @@ public class Graphics3D {
 	};
 	private Color [][][] texture = new Color[6][8][8]; // Stores a color value for each tile on the surface of the cube.
 	private int [] highest = new int[3];
-	private boolean [] vis = new boolean[6];
 	
 	// Set each tile to black(the background color).
 	public Graphics3D() {
@@ -132,12 +131,16 @@ public class Graphics3D {
 	// TODO: simplify.
 	public void drawCube(Graphics2D g) {
 		// Only paint three faces of the cube.
+		g.translate(400, 400); // Translate to the center of the frame.
 		for(int m = 2; m >= 0; m--) {
 			int k = highest[m];
 			// Store the corners of the current face to paint.
 			int [] x = {(int)points[a[k][1]][3], (int)points[a[k][0]][3], (int)points[a[k][2]][3], (int)points[a[k][3]][3]};
 			int [] y = {(int)points[a[k][1]][4], (int)points[a[k][0]][4], (int)points[a[k][2]][4], (int)points[a[k][3]][4]};
-			
+			// Draw one big polygon in the background color instead of drawing multiple smaller ones:
+			g.setColor(Color.BLACK);
+			g.fillPolygon(x, y, 4);
+
 			// Divide the polygon created by the array directly above into an 8*8 field of tiles:
 			double nx = (x[1]-x[0])/8.0; // x-size of a tile at one side
 			double ny = (y[1]-y[0])/8.0; // y-size of a tile at one side
@@ -145,35 +148,37 @@ public class Graphics3D {
 			double fy = ny+(y[3]-y[2])/8.0; // y-size of a tile at the other side
 			for(int i = 0; i < 8; i++) {
 				// Use a linear transition between n and f to determine respective size and position:
-				double nx1 = x[0]+400+i*nx;
-				double nx2 = x[0]+400+(i+1)*nx;
-				double ny1 = y[0]+400+i*ny;
-				double ny2 = y[0]+400+(i+1)*ny;
+				double nx1 = x[0]+i*nx;
+				double nx2 = x[0]+(i+1)*nx;
+				double ny1 = y[0]+i*ny;
+				double ny2 = y[0]+(i+1)*ny;
 				double fx1 = (x[3]-x[0]-i*fx)/8;
 				double fx2 = (x[3]-x[0]-(i+1)*fx)/8;
 				double fy1 = (y[3]-y[0]-i*fy)/8;
 				double fy2 = (y[3]-y[0]-(i+1)*fy)/8;
 				// Finally draw the 8 polygons of each row or column(depending on the rotation of the cube).
 				for(int j = 0; j < 8; j++) {
-					int [] xx = {(int)(nx1+j*fx1), (int)(nx1+(j+1)*fx1), (int)(nx2+(j+1)*fx2), (int)(nx2+j*fx2)};
-					int [] yy = {(int)(ny1+j*fy1), (int)(ny1+(j+1)*fy1), (int)(ny2+(j+1)*fy2), (int)(ny2+j*fy2)};
-					g.setColor(texture[k][i][j]);
-					g.fillPolygon(xx, yy, 4);
+					if(texture[k][i][j] != Color.BLACK) { // Only draw the tiles if they don't have the background color.
+						int [] xx = {(int)(nx1+j*fx1), (int)(nx1+(j+1)*fx1), (int)(nx2+(j+1)*fx2), (int)(nx2+j*fx2)};
+						int [] yy = {(int)(ny1+j*fy1), (int)(ny1+(j+1)*fy1), (int)(ny2+(j+1)*fy2), (int)(ny2+j*fy2)};
+						g.setColor(texture[k][i][j]);
+						g.fillPolygon(xx, yy, 4);
+					}
 				}
 				// Draw the horizontal(relative to starting rotation) lines on the cube.
 				g.setColor(Color.WHITE);
 				g.drawLine((int)nx1, (int)ny1, (int)(nx1+8*fx1), (int)(ny1+8*fy1));
 			}
 			// Draw the vertical(relative to starting rotation) lines on the cube + the top horizontal line.
-			double nx1 = x[0]+400+8*nx;
-			double ny1 = y[0]+400+8*ny;
+			double nx1 = x[0]+8*nx;
+			double ny1 = y[0]+8*ny;
 			double fx1 = (x[3]-x[0]-8*fx)/8;
 			double fy1 = (y[3]-y[0]-8*fy)/8;
 			double fx2 = (x[3]-x[0])/8.0;
 			double fy2 = (y[3]-y[0])/8.0;
 			g.drawLine((int)nx1, (int)ny1, (int)(nx1+fx1*8), (int)(ny1+fy1*8));
 			for(int i = 0; i <= 8; i++) {
-				g.drawLine((int)(x[0]+400+i*fx2), (int)(y[0]+400+i*fy2), (int)(nx1+i*fx1), (int)(ny1+i*fy1));
+				g.drawLine((int)(x[0]+i*fx2), (int)(y[0]+i*fy2), (int)(nx1+i*fx1), (int)(ny1+i*fy1));
 			}
 		}
 	}
