@@ -14,8 +14,14 @@ In Snake3D you can play snake on the surface of a 3d-cube.
 1. Download the source code here on github.
 2. Extract the .zip file.
 3. Compile the content of src. This can be done with `javac *.java` in the terminal **OR** by importing the code to any IDE you want and compile it from there.
-4. Press run in your IDE **OR** type `java main` in your terminal
-5. Have fun playing. You can change game mode/level with `g`, start the game with `space`. Ingame you can turn the cube with `wasd` and move the snake with `←` and `→`
+
+### How to play
+#### Self-compiled:
+Press run in your IDE **OR** type `java main` in your terminal
+#### Official version:
+Go to [releases](https://github.com/IntegratedQuantum/Snake3D/releases) and download any version of Snake3D. Double click the .jar file and you are good to go.
+#### Game-play:
+You can change game mode/level with `g`, start the game with `space`. Ingame you can turn the cube with `wasd` and move the snake with `←` and `→`
 
 ### Contribution
 If you find something you can make better, feel free to make a pull request(Thank you in advance). I would like it if you would try to roughly follow the syntax and commentation density I used in the code, but I won't reject your PR if you don't.
