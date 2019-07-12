@@ -159,9 +159,21 @@ public class Graphics3D {
 					int [] yy = {(int)(ny1+j*fy1), (int)(ny1+(j+1)*fy1), (int)(ny2+(j+1)*fy2), (int)(ny2+j*fy2)};
 					g.setColor(texture[k][i][j]);
 					g.fillPolygon(xx, yy, 4);
-					g.setColor(Color.WHITE);
-					g.drawPolygon(xx, yy, 4);
 				}
+				// Draw the horizontal(relative to starting rotation) lines on the cube.
+				g.setColor(Color.WHITE);
+				g.drawLine((int)nx1, (int)ny1, (int)(nx1+8*fx1), (int)(ny1+8*fy1));
+			}
+			// Draw the vertical(relative to starting rotation) lines on the cube + the top horizontal line.
+			double nx1 = x[0]+400+8*nx;
+			double ny1 = y[0]+400+8*ny;
+			double fx1 = (x[3]-x[0]-8*fx)/8;
+			double fy1 = (y[3]-y[0]-8*fy)/8;
+			double fx2 = (x[3]-x[0])/8.0;
+			double fy2 = (y[3]-y[0])/8.0;
+			g.drawLine((int)nx1, (int)ny1, (int)(nx1+fx1*8), (int)(ny1+fy1*8));
+			for(int i = 0; i <= 8; i++) {
+				g.drawLine((int)(x[0]+400+i*fx2), (int)(y[0]+400+i*fy2), (int)(nx1+i*fx1), (int)(ny1+i*fy1));
 			}
 		}
 	}
