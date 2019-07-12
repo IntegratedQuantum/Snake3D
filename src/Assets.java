@@ -7,35 +7,33 @@ import java.io.FileWriter;
 class Assets {
 	static Graphics3D g3d;
 	static void save(int [] score) {
+		String s = "";
 		for(int k = 0; k < 4; k++) {
-			String s = score[k]+"";
-			try {
-				FileWriter f = new FileWriter("score"+k+".snake3D");
-				for(int i = 0; i < s.length(); i++) {
-					f.write(s.charAt(i));
-				}
-				f.close();
-			} catch (Exception e) {
-				e.printStackTrace();
+			s += score[k]+"\n";
+		}
+		try {
+			FileWriter f = new FileWriter("score.snake3D");
+			for(int i = 0; i < s.length(); i++) {
+				f.write(s.charAt(i));
 			}
+			f.close();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	static int [] load() {
-		FileReader fr;
-		String score = "0";
 		int ret[] = new int[4];
-		for(int i = 0; i < 4; i++) {
-			try {
-				fr = new FileReader("score"+i+".snake3D");
-				BufferedReader br = new BufferedReader(fr);
-				score = br.readLine();
-				br.close();
-				fr.close();
+		try {
+			FileReader fr = new FileReader("score.snake3D");
+			BufferedReader br = new BufferedReader(fr);
+			for(int i = 0; i < 4; i++) {
+				String score = br.readLine();
 				ret[i] = Integer.parseInt(score);
-				score = "0";
-			} catch (Exception e) {
-				save(new int[]{0, 0, 0, 0});
 			}
+			br.close();
+			fr.close();
+		} catch (Exception e) {
+			save(new int[]{0, 0, 0, 0});
 		}
 		return ret;
 	}
