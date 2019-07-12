@@ -166,28 +166,27 @@ public class main extends JPanel implements KeyListener {
 	
 	long last = System.currentTimeMillis();
 	long last2 = System.nanoTime();
-	long last3 = System.currentTimeMillis();
 	public void update() {
 		boolean doIt = false; // Only update the rotation of the cube if it changed.
+		long cur = System.nanoTime(); // Store the time to use the same time for all following calculations
 		if(Cs[87]) { // 87 = 'w'
-			ay -= (System.nanoTime()-last2)/200000000.0;
+			ay -= (cur-last2)/300000000.0;
 			doIt = true;
 		}
 		if(Cs[83]) { // 83 = 's'
-			ay += (System.nanoTime()-last2)/200000000.0;
+			ay += (cur-last2)/300000000.0;
 			doIt = true;
 		}
 		if(Cs[65]) { // 65 = 'a'
-			ax += (System.nanoTime()-last2)/200000000.0;
+			ax += (cur-last2)/300000000.0;
 			doIt = true;
 		}
 		if(Cs[68]) { // 68 = 'd'
-			ax -= (System.nanoTime()-last2)/200000000.0;
+			ax -= (cur-last2)/300000000.0;
 			doIt = true;
 		}
-		if(doIt && System.currentTimeMillis()-last3 > 20) { // Update the rotation at most every 20 ms → 50fps.
+		if(doIt) {
 			Assets.g3d.reload(ax, ay);
-			last3 = System.currentTimeMillis();
 		}
 		if(System.currentTimeMillis() >= last+130-score[gamemode]/4) { // Update the movement of the snake at a certain speed depending on the score.
 			moved = false;
@@ -217,7 +216,7 @@ public class main extends JPanel implements KeyListener {
 				}
 			}
 		}
-		last2 = System.nanoTime();
+		last2 = cur;
 	}
 	
 	// Create a new fruit.
@@ -292,6 +291,10 @@ public class main extends JPanel implements KeyListener {
 				g.update();
 			}
 			g.repaint();
+			try {
+				Thread.sleep(1); // Sleep 1 ms to spare processor power. This also reduces graphic bugs(flickering in graphics) that might be created due to the creation of a new Thread in repaint().
+			}
+			catch(Exception e) {}
 		}
 	}
 }
