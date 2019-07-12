@@ -22,7 +22,7 @@ public class main extends JPanel implements KeyListener {
 	Object fruit; // Snakes eat fruits here!
 	Snake snake;
 	boolean pause = false;
-	int size = 8;
+	int size = 8; // Size of the game cube.
 	int [] Cscode = {39, 37}; // Store the keycodes used to move right/left. TODO: allow the user to change them and store them in a file.
 	boolean [] Cs = new boolean[250]; // Store if a key is pressed, to differentiate actual key pressing from getting a keyPressed-signal.
 	boolean death = false;
@@ -129,7 +129,7 @@ public class main extends JPanel implements KeyListener {
 	// Reset the current level.
 	public void initGame() {
 		border = new ArrayList<Object>();
-		Assets.g3d = new Graphics3D();
+		Assets.g3d = new Graphics3D(size);
 		Assets.g3d.reload(0, 0);
 		
 		// Generate the two levels.
@@ -156,7 +156,7 @@ public class main extends JPanel implements KeyListener {
 	
 	// Reset the game environment.
 	public void init() {
-		snake = new Snake(size, 4, 4, 0);
+		snake = new Snake(size, size/2, size/2, 0);
 		pause = true;
 		ax = 0;
 		ay = 0;
@@ -277,7 +277,6 @@ public class main extends JPanel implements KeyListener {
 	}
 	
 	public static void main(String [] args) {
-		Assets.g3d = new Graphics3D();
 		main g = new main();
 		g.repaint();
 		g.frame = new JFrame("snake");
