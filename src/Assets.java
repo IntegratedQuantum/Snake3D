@@ -16,6 +16,8 @@ class Assets {
 	static Color lineColor = Color.WHITE;
 	static Color snakeColor = Color.GREEN;
 	static Color textColor = Color.GREEN; // Color used for the text that is displayed in the top left corner.
+	static Color buttonColor = new Color(191, 255, 0);
+	static Color selectColor = new Color(255, 191, 0);
 	static Color deathColor = new Color(100, 0, 0); // Color of the "Game Over!" text.
 
 	// save/load highscore

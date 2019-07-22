@@ -2,6 +2,8 @@ import java.awt.AWTException;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -16,7 +18,7 @@ import javax.swing.JTextField;
 
 
 // main class opened o startup. Responsible for some game mechanics.
-public class main extends JPanel implements KeyListener {
+public class main extends JPanel implements KeyListener, MouseListener {
 	static int [] frsize = {800, 800}; // TODO: Allow resizing and use frsize everywhere.
 	Object fruit; // Snakes eat fruits here!
 	Snake snake;
@@ -115,6 +117,22 @@ public class main extends JPanel implements KeyListener {
 		} else {
 			overlay.keyReleased(e);
 		}
+	}
+	@Override
+	public void mouseClicked(MouseEvent e) {}
+	@Override
+	public void mouseEntered(MouseEvent e) {}
+	@Override
+	public void mouseExited(MouseEvent e) {}
+	@Override
+	public void mousePressed(MouseEvent e) {
+		if(overlay != null)
+			overlay.mousePressed(e);
+	}
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		if(overlay != null)
+			overlay.mouseReleased(e);
 	}
 	
 	// Reset the current level.
@@ -250,10 +268,10 @@ public class main extends JPanel implements KeyListener {
 	}
 
 	static MenuOverlay overlay = null;
+	static main g;
 	static void changeOverlay(MenuOverlay ov) {
 		overlay = ov;
 	}
-	static main g;
 	public static void main(String [] args) {
 		g = new main();
 		g.repaint();
@@ -264,6 +282,7 @@ public class main extends JPanel implements KeyListener {
 		g.frame.setSize(800, 900);
 		g.frame.add(g);
 		g.frame.addKeyListener(g);
+		g.frame.addMouseListener(g);
 		g.init();
 		while(true) {
 			g.update();
