@@ -181,34 +181,35 @@ public class main extends JPanel implements KeyListener {
 			Assets.ax -= (cur-last2)/300000000.0;
 			doIt = true;
 		}
-		if(doIt) {
-			Assets.g3d.reload();
-		}
-		if(System.currentTimeMillis() >= last+130-score[gamemode]/4) { // Update the movement of the snake at a certain speed depending on the score.
-			moved = false;
-			last = System.currentTimeMillis();
-			snake.move();
-			if(snake.eat(fruit)) {
-				if(gamemode == 1) {
-					fruit.turnToBorder(); // Make a new border in hard mode every time the snake eats a fruit..
-					border.add(fruit);
+		Assets.g3d.reload();
+
+		if(overlay == null) {
+			if(System.currentTimeMillis() >= last+130-score[gamemode]/4) { // Update the movement of the snake at a certain speed depending on the score.
+				moved = false;
+				last = System.currentTimeMillis();
+				snake.move();
+				if(snake.eat(fruit)) {
+					if(gamemode == 1) {
+						fruit.turnToBorder(); // Make a new border in hard mode every time the snake eats a fruit..
+						border.add(fruit);
+					}
+					fruit = new Object(size, snake, border);
+					score[gamemode]++;
+					if(score[gamemode] > highscore[gamemode]) {
+						highscore[gamemode]  = score[gamemode];
+					}
 				}
-				fruit = new Object(size, snake, border);
-				score[gamemode]++;
-				if(score[gamemode] > highscore[gamemode]) {
-					highscore[gamemode]  = score[gamemode];
+				else if(snake.eatSelf()) {
+					overlay = new MainMenu(true);
+					if(highscore[gamemode] > Assets.load()[gamemode]) {
+						Assets.save(highscore);
+					}
 				}
-			}
-			else if(snake.eatSelf()) {
-				overlay = new MainMenu(true);
-				if(highscore[gamemode] > Assets.load()[gamemode]) {
-					Assets.save(highscore);
-				}
-			}
-			if(snake.eatBorder(border)) {
-				overlay = new MainMenu(true);
-				if(highscore[gamemode] > Assets.load()[gamemode]) {
-					Assets.save(highscore);
+				if(snake.eatBorder(border)) {
+					overlay = new MainMenu(true);
+					if(highscore[gamemode] > Assets.load()[gamemode]) {
+						Assets.save(highscore);
+					}
 				}
 			}
 		}
@@ -265,9 +266,7 @@ public class main extends JPanel implements KeyListener {
 		g.frame.addKeyListener(g);
 		g.init();
 		while(true) {
-			if(overlay == null) {
-				g.update();
-			}
+			g.update();
 			g.repaint();
 			try {
 				Thread.sleep(1); // Sleep 1 ms to spare processor power. This also reduces graphic bugs(flickering in graphics) that might be created due to the creation of a new Thread in repaint().

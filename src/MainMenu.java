@@ -39,7 +39,6 @@ public class MainMenu extends MenuOverlay {
 		}
 		Assets.ax += (System.currentTimeMillis()-lastT)/500.0; // Make the cube spin when in menu.
 		lastT = System.currentTimeMillis();
-		Assets.g3d.reload();
 		if(isDead) {
 			g2d.setColor(Assets.deathColor);
 			g2d.setFont(new Font("Sanserif", 100, 100));
