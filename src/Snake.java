@@ -1,10 +1,8 @@
-import java.awt.Color;
 import java.util.List;
 
 public class Snake {
 	Vector [] seg = new Vector [8]; // Uses the same functionality as a List(see Snake.growArray()), but can be handled like an array.
 	int length = 3; // Start with a length of 3.
-	Color color = new Color(0, 255, 0); // TODO: make this changeable from a menu.
 	private int size;
 	private int [][] diruse = { // direction is encoded as number from 0 to 3. This is the 'encoder'.
 		{0, -1},
@@ -40,7 +38,7 @@ public class Snake {
 	public void move() {
 		try {
 			// Remove the end of the tail from the list to paint by g3d.
-			Assets.g3d.setColor(seg[length].x, seg[length].y, seg[length].z, Color.BLACK);
+			Assets.g3d.setColor(seg[length].x, seg[length].y, seg[length].z, Assets.bgColor);
 		}catch(Exception ignored){}
 		// Moving the tail.
 		for(int i = length; i > 0; i--) {
@@ -164,7 +162,7 @@ public class Snake {
 			}
 		}
 		// Tell g3d where to paint the new head.
-		Assets.g3d.setColor(seg[0].x, seg[0].y, seg[0].z, Color.GREEN);
+		Assets.g3d.setColor(seg[0].x, seg[0].y, seg[0].z, Assets.snakeColor);
 	}
 	
 	// Determines if the object is eaten.

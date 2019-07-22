@@ -1,9 +1,8 @@
 import java.awt.AWTException;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -246,25 +245,21 @@ public class main extends JPanel implements KeyListener {
 	@Override
 	public void paint(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
-		g2d.setColor(Color.BLACK);
+		g2d.setColor(Assets.bgColor);
 		g2d.fillRect(0, 0, 800, 900);
 		g2d.fillRect(0, 0, 125, 40);
-		g2d.setColor(Color.GREEN);
+		g2d.setColor(Assets.textColor);
 		g2d.drawString("Score: "+score[gamemode]+"/"+highscore[gamemode], 0, 16);
 		g2d.drawString("Gamemode: "+gamemodes[gamemode], 0, 36);
 		if(pause) {
-			g2d.setColor(Color.BLACK);
-			g2d.fillRect(0, 40, 230, 60);
-			g2d.setColor(Color.GREEN);
+			g2d.setColor(Assets.textColor);
 			g2d.drawString("Press Space to Start or Stop.", 0, 56);
 			g2d.drawString("Use ← and → to change direction.", 0, 76);
 			g2d.drawString("Use g to cycle between gamemodes.", 0, 96);
 		}
 		Assets.g3d.drawCube(g2d);
 		if(death) {
-			g2d.setColor(Color.BLACK);
-			g2d.fillRect(0, 40, 230, 40);
-			g2d.setColor(Color.GREEN);
+			g2d.setColor(Assets.textColor);
 			g2d.drawString("Press Space to restart.", 0, 56);
 			g2d.drawString("Use g to cycle between gamemodes.", 0, 76);
 			if(System.currentTimeMillis()-lastdeath > 1000) {
@@ -273,7 +268,7 @@ public class main extends JPanel implements KeyListener {
 			ax += (System.currentTimeMillis()-lastdeath)/500.0; // Make the cube spin after death.
 			lastdeath = System.currentTimeMillis();
 			Assets.g3d.reload(ax, ay);
-			g2d.setColor(new Color(100, 0, 0));
+			g2d.setColor(Assets.deathColor);
 			g2d.setFont(new Font("Sanserif", 100, 100));
 			g2d.drawString("Game", 300, 350);
 			g2d.drawString("Over!", 300, 450);

@@ -1,7 +1,7 @@
 import java.awt.Color;
 import java.util.List;
-
 import javax.swing.JFrame;
+
 
 public class Object extends JFrame {
 	Vector pos = new Vector();
@@ -25,7 +25,7 @@ public class Object extends JFrame {
 		pos.x = x;
 		pos.y = y;
 		pos.z = l;
-		color = new Color(250, 250, 250); // color for borders.
+		color = Assets.borderColor; // color for borders.
 		eatable = false;
 		// Tell g3d to paint the object.
 		Assets.g3d.setColor(pos.x, pos.y, pos.z, color);
@@ -65,7 +65,7 @@ public class Object extends JFrame {
 	public void turnToBorder() {
 		int [] opposite = {2, 3, 0, 1, 5, 4};
 		eatable = false;
-		color = new Color(250, 250, 250); // color for borders.
+		color = Assets.borderColor; // color for borders.
 		pos.z = opposite[pos.z];
 		Assets.g3d.setColor(pos.x, pos.y, pos.z, color);
 	}

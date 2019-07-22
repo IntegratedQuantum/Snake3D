@@ -1,5 +1,6 @@
-import java.awt.Graphics2D;
 import java.awt.Color;
+import java.awt.Graphics2D;
+
 
 // This class is responsible for 3d-projection thus allowing the project to only depend on the java standard library.
 public class Graphics3D {
@@ -42,7 +43,7 @@ public class Graphics3D {
 		for(int i = 0; i < 6; i++) {
 			for(int j = 0; j < size; j++) {
 				for(int k = 0; k < size; k++) {
-					texture[i][j][k] = Color.BLACK;
+					texture[i][j][k] = Assets.bgColor;
 				}
 			}
 		}
@@ -125,7 +126,7 @@ public class Graphics3D {
 	
 	// From now on paint a new color at that tile until changed..
 	public void setColor(int x, int y, int l, Color c) {
-		if(texture[l][x][y] != new Color(250, 250, 250)) { // Don't change the color, if there is a border tile(Used to make the border not disappear after the snake hit onto it.).
+		if(texture[l][x][y] != Assets.borderColor) { // Don't change the color, if there is a border tile(Used to make the border not disappear after the snake hit onto it.).
 			texture[l][x][y] = c;
 		}
 	}
@@ -141,7 +142,7 @@ public class Graphics3D {
 			int [] x = {(int)points[a[k][1]][3], (int)points[a[k][0]][3], (int)points[a[k][2]][3], (int)points[a[k][3]][3]};
 			int [] y = {(int)points[a[k][1]][4], (int)points[a[k][0]][4], (int)points[a[k][2]][4], (int)points[a[k][3]][4]};
 			// Draw one big polygon in the background color instead of drawing multiple smaller ones:
-			g.setColor(Color.BLACK);
+			g.setColor(Assets.bgColor);
 			g.fillPolygon(x, y, 4);
 
 			// Divide the polygon created by the array directly above into an 8*8 field of tiles:
@@ -161,7 +162,7 @@ public class Graphics3D {
 				double fy2 = (y[3]-y[0]-(i+1)*fy)/size;
 				// Finally draw the 8 polygons of each row or column(depending on the rotation of the cube).
 				for(int j = 0; j < size; j++) {
-					if(texture[k][i][j] != Color.BLACK) { // Only draw the tiles if they don't have the background color.
+					if(texture[k][i][j] != Assets.bgColor) { // Only draw the tiles if they don't have the background color.
 						int [] xx = {(int)(nx1+j*fx1), (int)(nx1+(j+1)*fx1), (int)(nx2+(j+1)*fx2), (int)(nx2+j*fx2)};
 						int [] yy = {(int)(ny1+j*fy1), (int)(ny1+(j+1)*fy1), (int)(ny2+(j+1)*fy2), (int)(ny2+j*fy2)};
 						g.setColor(texture[k][i][j]);
@@ -169,7 +170,7 @@ public class Graphics3D {
 					}
 				}
 				// Draw the horizontal(relative to starting rotation) lines on the cube.
-				g.setColor(Color.WHITE);
+				g.setColor(Assets.lineColor);
 				g.drawLine((int)nx1, (int)ny1, (int)(nx1+size*fx1), (int)(ny1+size*fy1));
 			}
 			// Draw the vertical(relative to starting rotation) lines on the cube + the top horizontal line.
