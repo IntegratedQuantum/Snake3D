@@ -44,13 +44,12 @@ public class Object extends JFrame {
 	
 	// Determines if the object shares the location with any segment of the snake.
 	public boolean onSnake(Snake snake) {
-		boolean on = false;
-		for(int i = snake.length; i >= 0; i--) {
-			if(snake.seg[i].x == pos.x && snake.seg[i].y == pos.y) {
-				on = true;
+		for(LinkedVector seg = snake.head; seg.next != null; seg = seg.next) {
+			if(pos.x == seg.x && pos.y == seg.y && pos.z == seg.z) {
+				return true;
 			}
 		}
-		return on;
+		return false;
 	}
 	
 	// Checks if the object is on the location specified by x,y,l.
