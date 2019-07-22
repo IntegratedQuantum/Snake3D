@@ -7,6 +7,8 @@ import java.io.FileWriter;
 // Stores the 3D-graphics object and is responsible for file-saving/-loading.
 class Assets {
 	static Graphics3D g3d;
+	static double ax = 0;
+	static double ay = 0;
 
 	// Colors: TODO: Make them changeable from the menu.
 	static Color borderColor = new Color(250, 250, 250);

@@ -50,10 +50,10 @@ public class Graphics3D {
 	}
 	
 	// Rotate the cube to a certain angle representative. Uses only the deltas.
-	void reload(double ax, double ay) {
-		update(ax-this.ax, ay-this.ay);
-		this.ax = ax;
-		this.ay = ay;
+	void reload() {
+		update(Assets.ax-this.ax, Assets.ay-this.ay);
+		this.ax = Assets.ax;
+		this.ay = Assets.ay;
 	}
 	
 	// Rotate the cube and do all the projection work.

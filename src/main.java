@@ -27,8 +27,6 @@ public class main extends JPanel implements KeyListener {
 	boolean death = false;
 	boolean moved = false;
 	ArrayList<Object> border = new ArrayList<Object>();
-	double ax;
-	double ay;
 	int [] score = new int[5];
 	int [] highscore = new int[5];
 	int n = 0;
@@ -110,18 +108,12 @@ public class main extends JPanel implements KeyListener {
 	@Override
 	public void keyReleased(KeyEvent e) {
 		Cs[e.getKeyCode()] = false;
-		if(e.getKeyCode() == 32) { // 32 = 'space'
-			if(pause) {
-				pause = false;
+		if(overlay == null) {
+			if(e.getKeyCode() == 32) { // 32 = 'space'
+				overlay = new MainMenu(false);
 			}
-			else {
-				pause = true;
-			}
-			if(death) {
-				death = false;
-				score[gamemode] = 0;
-				init();
-			}
+		} else {
+			overlay.keyReleased(e);
 		}
 	}
 	
@@ -135,7 +127,7 @@ public class main extends JPanel implements KeyListener {
 		snake = new Snake(size, size/2, size/2, 0);
 		border = new ArrayList<Object>();
 		Assets.g3d = new Graphics3D(size);
-		Assets.g3d.reload(0, 0);
+		Assets.g3d.reload();
 
 		// Generate the two levels.
 		// TODO: make this more general.
@@ -161,9 +153,9 @@ public class main extends JPanel implements KeyListener {
 	
 	// Reset the game environment.
 	public void init() {
-		pause = true;
-		ax = 0;
-		ay = 0;
+		overlay = new MainMenu(false);
+		Assets.ax = 0;
+		Assets.ay = 0;
 		highscore = Assets.load();
 		initGame();
 	}
@@ -174,23 +166,23 @@ public class main extends JPanel implements KeyListener {
 		boolean doIt = false; // Only update the rotation of the cube if it changed.
 		long cur = System.nanoTime(); // Store the time to use the same time for all following calculations
 		if(Cs[87]) { // 87 = 'w'
-			ay -= (cur-last2)/300000000.0;
+			Assets.ay -= (cur-last2)/300000000.0;
 			doIt = true;
 		}
 		if(Cs[83]) { // 83 = 's'
-			ay += (cur-last2)/300000000.0;
+			Assets.ay += (cur-last2)/300000000.0;
 			doIt = true;
 		}
 		if(Cs[65]) { // 65 = 'a'
-			ax += (cur-last2)/300000000.0;
+			Assets.ax += (cur-last2)/300000000.0;
 			doIt = true;
 		}
 		if(Cs[68]) { // 68 = 'd'
-			ax -= (cur-last2)/300000000.0;
+			Assets.ax -= (cur-last2)/300000000.0;
 			doIt = true;
 		}
 		if(doIt) {
-			Assets.g3d.reload(ax, ay);
+			Assets.g3d.reload();
 		}
 		if(System.currentTimeMillis() >= last+130-score[gamemode]/4) { // Update the movement of the snake at a certain speed depending on the score.
 			moved = false;
@@ -208,13 +200,13 @@ public class main extends JPanel implements KeyListener {
 				}
 			}
 			else if(snake.eatSelf()) {
-				death = true;
+				overlay = new MainMenu(true);
 				if(highscore[gamemode] > Assets.load()[gamemode]) {
 					Assets.save(highscore);
 				}
 			}
 			if(snake.eatBorder(border)) {
-				death = true;
+				overlay = new MainMenu(true);
 				if(highscore[gamemode] > Assets.load()[gamemode]) {
 					Assets.save(highscore);
 				}
@@ -241,7 +233,6 @@ public class main extends JPanel implements KeyListener {
 		}
 	}
 	
-	long lastdeath = System.currentTimeMillis();
 	@Override
 	public void paint(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
@@ -251,32 +242,19 @@ public class main extends JPanel implements KeyListener {
 		g2d.setColor(Assets.textColor);
 		g2d.drawString("Score: "+score[gamemode]+"/"+highscore[gamemode], 0, 16);
 		g2d.drawString("Gamemode: "+gamemodes[gamemode], 0, 36);
-		if(pause) {
-			g2d.setColor(Assets.textColor);
-			g2d.drawString("Press Space to Start or Stop.", 0, 56);
-			g2d.drawString("Use ← and → to change direction.", 0, 76);
-			g2d.drawString("Use g to cycle between gamemodes.", 0, 96);
-		}
 		Assets.g3d.drawCube(g2d);
-		if(death) {
-			g2d.setColor(Assets.textColor);
-			g2d.drawString("Press Space to restart.", 0, 56);
-			g2d.drawString("Use g to cycle between gamemodes.", 0, 76);
-			if(System.currentTimeMillis()-lastdeath > 1000) {
-				lastdeath = System.currentTimeMillis();
-			}
-			ax += (System.currentTimeMillis()-lastdeath)/500.0; // Make the cube spin after death.
-			lastdeath = System.currentTimeMillis();
-			Assets.g3d.reload(ax, ay);
-			g2d.setColor(Assets.deathColor);
-			g2d.setFont(new Font("Sanserif", 100, 100));
-			g2d.drawString("Game", 300, 350);
-			g2d.drawString("Over!", 300, 450);
+		if(overlay != null) {
+			overlay.paint(g2d);
 		}
 	}
-	
+
+	static MenuOverlay overlay = null;
+	static void changeOverlay(MenuOverlay ov) {
+		overlay = ov;
+	}
+	static main g;
 	public static void main(String [] args) {
-		main g = new main();
+		g = new main();
 		g.repaint();
 		g.frame = new JFrame("snake");
 		g.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -287,7 +265,7 @@ public class main extends JPanel implements KeyListener {
 		g.frame.addKeyListener(g);
 		g.init();
 		while(true) {
-			if(!g.pause && !g.death) {
+			if(overlay == null) {
 				g.update();
 			}
 			g.repaint();
