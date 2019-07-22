@@ -97,26 +97,17 @@ public class Graphics3D {
 			for(int j = 0; j < 4; j++)
 				val[i] += points[a[areas[i]][j]][2];
 		}
-		// Sort the areas by their distance to the screen:
-		highest[0] = highest[1] = highest[2] = 0;
-		for(int i = 1; i < 3; i++) {
-			if(val[i] < val[highest[0]])
-				highest[0] = i;
-		}
-		if(highest[0] == highest[1]) {
-			highest[1]++;
-			highest[2]++;
-		}
-		for(int i = highest[1]+1; i < 3; i++) {
-			if(val[i] < val[highest[1]] && i != highest[0])
-				highest[1] = i;
-		}
-		if(highest[1] == highest[2])
-			highest[2]++;
-		for(int i = highest[2]; i < 3; i++) {
-			if(i != highest[0] && i != highest[1]) {
-				highest[2] = i;
-				break;
+		// Sort the areas by their distance to the screen using SelectionSort:
+		highest[0] = 0;
+		highest[1] = 1;
+		highest[2] = 2;
+		for(int i = 0; i < 3; i++) {
+			for(int j = i+1; j < 3; j++) {
+				if(val[highest[j]] < val[highest[i]]) {
+					int local = highest[j];
+					highest[j] = highest[i];
+					highest[i] = local;
+				}
 			}
 		}
 		// put the corresponding area index into the array.
