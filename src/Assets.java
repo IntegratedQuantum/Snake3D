@@ -53,7 +53,7 @@ class Assets {
 			br.close();
 			fr.close();
 		} catch (Exception e) {
-			save(new int[levels.length+difficulty.length*levels.length]);
+			e.printStackTrace();
 		}
 		return ret;
 	}
