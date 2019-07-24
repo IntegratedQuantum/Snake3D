@@ -29,13 +29,15 @@ public class main extends JPanel implements KeyListener, MouseListener {
 	boolean death = false;
 	boolean moved = false;
 	ArrayList<Object> border = new ArrayList<Object>();
-	int [] score = new int[5];
-	int [] highscore = new int[5];
+	int [] score = new int[Assets.levels.length+Assets.difficulty.length*Assets.levels.length];
+	int [] highscore = new int[Assets.levels.length+Assets.difficulty.length*Assets.levels.length];
 	int n = 0;
 	int gamemode;
-	String [] gamemodes = {"normal", "hard", "level 1", "level 2", "big cube"}; // TODO: Allow the levels to be played in hard-mode.
+	int difficulty = 0;
+	int level = 0;
+	String [] gamemodes = {"normal", "hard", "level 1", "level 2", "big cube"};
 	JFrame frame;
-	int [][][] level = { // TODO: store the level data in a file.
+	int [][][] levelData = { // TODO: store the level data in a file.
 			{			//x, y
 				{3, 1},
 				{4, 1},
@@ -137,7 +139,7 @@ public class main extends JPanel implements KeyListener, MouseListener {
 	
 	// Reset the current level.
 	public void initGame() {
-		if(gamemode == 4) {
+		if(level == 3) {
 			size = 16;
 		} else {
 			size = 8;
@@ -149,20 +151,20 @@ public class main extends JPanel implements KeyListener, MouseListener {
 
 		// Generate the two levels.
 		// TODO: make this more general.
-		if(gamemode == 2) {
+		if(level == 1) {
 			// GM 3 contains circular borders on two opposing faces.
-			for(int i = 0; i < level[0].length; i++) {
-				border.add(new Object(level[0][i][0], level[0][i][1], 4));
+			for(int i = 0; i < levelData[0].length; i++) {
+				border.add(new Object(levelData[0][i][0], levelData[0][i][1], 4));
 			}
-			for(int i = 0; i < level[0].length; i++) {
-				border.add(new Object(level[0][i][0], level[0][i][1], 5));
+			for(int i = 0; i < levelData[0].length; i++) {
+				border.add(new Object(levelData[0][i][0], levelData[0][i][1], 5));
 			}
 		}
-		else if(gamemode == 3) {
+		else if(level == 2) {
 			// GM 3 contains partially bordered sides. All sides are equal.
 			for(int j = 0; j < 6; j++) {
-				for(int i = 0; i < level[1].length; i++) {
-					border.add(new Object(level[1][i][0], level[1][i][1], j));
+				for(int i = 0; i < levelData[1].length; i++) {
+					border.add(new Object(levelData[1][i][0], levelData[1][i][1], j));
 				}
 			}
 		}
@@ -202,30 +204,30 @@ public class main extends JPanel implements KeyListener, MouseListener {
 		Assets.g3d.reload();
 
 		if(overlay == null) {
-			if(System.currentTimeMillis() >= last+130-score[gamemode]/4) { // Update the movement of the snake at a certain speed depending on the score.
+			if(System.currentTimeMillis() >= last+130-score[level+difficulty*Assets.levels.length]/4) { // Update the movement of the snake at a certain speed depending on the score.
 				moved = false;
 				last = System.currentTimeMillis();
 				snake.move();
 				if(snake.eat(fruit)) {
-					if(gamemode == 1) {
+					if(difficulty == 1) {
 						fruit.turnToBorder(); // Make a new border in hard mode every time the snake eats a fruit..
 						border.add(fruit);
 					}
 					fruit = new Object(size, snake, border);
-					score[gamemode]++;
-					if(score[gamemode] > highscore[gamemode]) {
-						highscore[gamemode]  = score[gamemode];
+					score[level+difficulty*Assets.levels.length]++;
+					if(score[level+difficulty*Assets.levels.length] > highscore[level+difficulty*Assets.levels.length]) {
+						highscore[level+difficulty*Assets.levels.length]  = score[level+difficulty*Assets.levels.length];
 					}
 				}
 				else if(snake.eatSelf()) {
 					overlay = new MainMenu(true);
-					if(highscore[gamemode] > Assets.load()[gamemode]) {
+					if(highscore[level+difficulty*Assets.levels.length] > Assets.load()[level+difficulty*Assets.levels.length]) {
 						Assets.save(highscore);
 					}
 				}
 				if(snake.eatBorder(border)) {
 					overlay = new MainMenu(true);
-					if(highscore[gamemode] > Assets.load()[gamemode]) {
+					if(highscore[level+difficulty*Assets.levels.length] > Assets.load()[level+difficulty*Assets.levels.length]) {
 						Assets.save(highscore);
 					}
 				}
@@ -259,8 +261,8 @@ public class main extends JPanel implements KeyListener, MouseListener {
 		g2d.fillRect(0, 0, 800, 900);
 		g2d.fillRect(0, 0, 125, 40);
 		g2d.setColor(Assets.textColor);
-		g2d.drawString("Score: "+score[gamemode]+"/"+highscore[gamemode], 0, 16);
-		g2d.drawString("Gamemode: "+gamemodes[gamemode], 0, 36);
+		g2d.drawString("Score: "+score[level+difficulty*Assets.levels.length]+"/"+highscore[level+difficulty*Assets.levels.length], 0, 16);
+		g2d.drawString("Difficulty: "+Assets.difficulty[difficulty], 0, 36);
 		Assets.g3d.drawCube(g2d);
 		if(overlay != null) {
 			overlay.paint(g2d);
