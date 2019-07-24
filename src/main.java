@@ -162,6 +162,7 @@ public class main extends JPanel implements KeyListener, MouseListener {
 	// Reset the game environment.
 	public void init() {
 		overlay = new MainMenu(false);
+		score = new int[Assets.levels.length+Assets.difficulty.length*Assets.levels.length];
 		Assets.ax = 0;
 		Assets.ay = 0;
 		highscore = Assets.load();

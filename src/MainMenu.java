@@ -7,21 +7,27 @@ import java.awt.Graphics2D;
 public class MainMenu extends MenuOverlay {
 	boolean isDead;
 	long lastT = System.currentTimeMillis();
+	long startT; // Time this overlay was created.
 	int pressed = -1; // Shows which button is currently pressed by the mouse.
 	int difficulty = 0;
 	int level = 0;
 	public MainMenu(boolean isDead) {
 		this.isDead = isDead;
+		startT = System.currentTimeMillis();
 	}
 	@Override
 	public void keyReleased(KeyEvent e) {
+		if(isDead) {
+			if(System.currentTimeMillis() - startT < 1000) // Don't leave the death screen for 1s to prevent the death screen from disappearing due to keys that were still pressed while the player died and released shortly afterwards. 
+				return;
+			if(e.getKeyCode() == 65 || e.getKeyCode() == 68 || e.getKeyCode() == 83 || e.getKeyCode() == 87) // Let the player still turn the cube in death screen.
+				return;
+			main.g.init();
+			isDead = false;
+			return;
+		}
 		if(e.getKeyCode() == 32) { // 32 = 'space'
-			if(isDead) {
-				main.g.init();
-				isDead = false;
-			} else {
-				main.changeOverlay(null);
-			}
+			main.changeOverlay(null);
 		}
 		if(e.getKeyCode() == 71) { // 71 = 'G'
 			difficulty++;
