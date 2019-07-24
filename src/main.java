@@ -22,17 +22,14 @@ public class main extends JPanel implements KeyListener, MouseListener {
 	static int [] frsize = {800, 800}; // TODO: Allow resizing and use frsize everywhere.
 	Object fruit; // Snakes eat fruits here!
 	Snake snake;
-	boolean pause = false;
 	int size = 8; // Size of the game cube.
 	int [] Cscode = {39, 37}; // Store the keycodes used to move right/left. TODO: allow the user to change them and store them in a file.
 	boolean [] Cs = new boolean[250]; // Store if a key is pressed, to differentiate actual key pressing from getting a keyPressed-signal.
-	boolean death = false;
 	boolean moved = false;
 	ArrayList<Object> border = new ArrayList<Object>();
 	int [] score = new int[Assets.levels.length+Assets.difficulty.length*Assets.levels.length];
 	int [] highscore = new int[Assets.levels.length+Assets.difficulty.length*Assets.levels.length];
 	int n = 0;
-	int gamemode;
 	int difficulty = 0;
 	int level = 0;
 	String [] gamemodes = {"normal", "hard", "level 1", "level 2", "big cube"};
@@ -92,21 +89,12 @@ public class main extends JPanel implements KeyListener, MouseListener {
 	
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if(!pause) {
+		if(overlay == null) {
 			if(!Cs[e.getKeyCode()]) {
 				keyLatest(e.getKeyCode()); // Submit the latest new keypress to the game.
 			}
 		}
 		Cs[e.getKeyCode()] = true;
-		if(pause || death) {
-			if(e.getKeyCode() == 71) { // 71 = 'g'
-				gamemode ++;
-				if(gamemode == gamemodes.length) {
-					gamemode = 0;
-				}
-				initGame();
-			}
-		}
 	}
 	
 	@Override

@@ -23,6 +23,21 @@ public class MainMenu extends MenuOverlay {
 				main.changeOverlay(null);
 			}
 		}
+		if(e.getKeyCode() == 71) { // 71 = 'G'
+			difficulty++;
+			if(difficulty == Assets.difficulty.length) {
+				difficulty = 0;
+			}
+			main.g.difficulty = difficulty;
+		}
+		if(e.getKeyCode() == 76) { // 76 = 'L'
+			level++;
+			if(level == Assets.levels.length) {
+				level = 0;
+			}
+			main.g.level = level;
+			main.g.initGame();
+		}
 	}
 	@Override
 	public void mousePressed(MouseEvent e) {
@@ -110,7 +125,7 @@ public class MainMenu extends MenuOverlay {
 		g2d.setColor(Assets.textColor);
 		g2d.drawString("Press Space to Start.", 0, 56);
 		g2d.drawString("Use ← and → to change direction.", 0, 76);
-		g2d.drawString("Use g to cycle between gamemodes.", 0, 96);
+		g2d.drawString("Use g and l to cycle through gamemodes.", 0, 96);
 		if(System.currentTimeMillis()-lastT > 1000) {
 			lastT = System.currentTimeMillis();
 		}
@@ -132,7 +147,7 @@ public class MainMenu extends MenuOverlay {
 			// Difficulty selection:
 			g2d.setColor(Assets.textColor);
 			g2d.setFont(new Font("Sanserif", 20, 20));
-			g2d.drawString("difficulty:", 2, 200);
+			g2d.drawString("Difficulty:", 2, 200);
 			for(int i = 0; i < Assets.difficulty.length; i++) {
 				g2d.setColor(Assets.bgColor);
 				g2d.fillRect(-1, 215+i*35, 101, 30);
@@ -148,7 +163,7 @@ public class MainMenu extends MenuOverlay {
 			}
 			// Level selection:
 			g2d.setColor(Assets.textColor);
-			g2d.drawString("level:", 703, 200);
+			g2d.drawString("Level:", 703, 200);
 			for(int i = 0; i < Assets.levels.length; i++) {
 				g2d.setColor(Assets.bgColor);
 				g2d.fillRect(700, 215+i*35, 101, 30);
